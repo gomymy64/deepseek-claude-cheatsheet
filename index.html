@@ -1,0 +1,1497 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Материалы к Уроку DeepSeek V4 + Claude Code = 100X ДЕШЕВЛЕ | Мастодонт</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Onest:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ============ OPERATOR MANUAL — DEEPSEEK CHEATSHEET ============ */
+
+:root {
+  --bg: #08090c;
+  --bg-elevated: #0f1015;
+  --bg-card: #14161e;
+  --ink: #ededed;
+  --ink-soft: #b4b4bc;
+  --ink-muted: #6a6a72;
+  --ink-faint: #3a3a42;
+  --rule: rgba(255, 255, 255, 0.06);
+  --rule-strong: rgba(255, 255, 255, 0.13);
+
+  --cyan: #00f5d4;
+  --lime: #c8ff00;
+  --orange: #ff7a3d;
+  --red: #f87171;
+  --green: #4ade80;
+
+  --grad: linear-gradient(135deg, var(--cyan), var(--lime));
+  --grad-warm: linear-gradient(135deg, var(--orange), #ffb38f);
+
+  --display: 'Russo One', 'Onest', sans-serif;
+  --body: 'Onest', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Noise overlay */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+
+/* Glow background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    radial-gradient(circle at 15% 25%, rgba(0, 245, 212, 0.06), transparent 40%),
+    radial-gradient(circle at 85% 75%, rgba(255, 122, 61, 0.07), transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(200, 255, 0, 0.03), transparent 50%);
+}
+
+::selection { background: var(--lime); color: #000; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--grad); border-radius: 5px; }
+
+/* ============ NAVIGATION ============ */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(8, 9, 12, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--rule);
+  position: relative;
+}
+.nav::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--cyan), var(--lime), var(--orange), transparent);
+  opacity: 0.5;
+}
+.nav-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 18px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 32px;
+}
+.nav-brand {
+  font-family: var(--display);
+  font-size: 18px;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.nav-brand::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  background: var(--grad);
+  border-radius: 2px;
+  box-shadow: 0 0 14px var(--cyan);
+}
+.nav-links {
+  display: flex;
+  gap: 4px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+}
+.nav-links a {
+  color: var(--ink-muted);
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  transition: all 0.2s;
+}
+.nav-links a:hover {
+  color: var(--ink);
+  border-color: var(--rule-strong);
+  background: var(--bg-card);
+}
+@media (max-width: 720px) {
+  .nav-links { display: none; }
+  .nav-inner { padding: 14px 20px; }
+}
+
+/* ============ CONTAINER ============ */
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 80px 32px 60px;
+  position: relative;
+  z-index: 1;
+}
+.container-narrow {
+  max-width: 980px;
+}
+
+/* ============ HERO ============ */
+.hero {
+  padding: 80px 32px 100px;
+  max-width: 1280px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 18px;
+  background: rgba(0, 245, 212, 0.08);
+  border: 1px solid rgba(0, 245, 212, 0.25);
+  border-radius: 100px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: var(--cyan);
+  text-transform: uppercase;
+  margin-bottom: 32px;
+}
+.hero-badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: var(--cyan);
+  border-radius: 50%;
+  box-shadow: 0 0 12px var(--cyan);
+  animation: pulse-dot 2s infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.hero-title {
+  font-family: var(--display);
+  font-size: clamp(48px, 8vw, 96px);
+  line-height: 0.95;
+  letter-spacing: -0.025em;
+  margin-bottom: 28px;
+}
+.hero-title .grad {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero-title .grad-warm {
+  background: var(--grad-warm);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero-sub {
+  font-size: clamp(17px, 1.8vw, 22px);
+  color: var(--ink-soft);
+  max-width: 720px;
+  margin-bottom: 48px;
+  line-height: 1.55;
+}
+.hero-sub b { color: var(--ink); font-weight: 700; }
+
+.hero-video {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 22px;
+  background: var(--bg-card);
+  border: 1px solid var(--rule-strong);
+  border-radius: 12px;
+  text-decoration: none;
+  color: var(--ink);
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.hero-video::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+  transition: left 0.5s;
+}
+.hero-video:hover::before { left: 100%; }
+.hero-video:hover { transform: translateY(-2px); border-color: var(--orange); }
+.hero-video-play {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff0000, #cc0000);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.hero-video-play::before {
+  content: '';
+  width: 0;
+  height: 0;
+  border-left: 10px solid #fff;
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent;
+  margin-left: 3px;
+}
+.hero-video-text { display: flex; flex-direction: column; }
+.hero-video-text small {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-faint);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.hero-video-text span {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+/* ============ SECTION TITLE ============ */
+.section-title {
+  font-family: var(--display);
+  font-size: clamp(32px, 5vw, 56px);
+  line-height: 1;
+  letter-spacing: -0.025em;
+  margin-bottom: 48px;
+}
+.section-title .grad {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.section-title .grad-warm {
+  background: var(--grad-warm);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.section-tag {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: var(--cyan);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-tag::before {
+  content: '';
+  width: 24px;
+  height: 1px;
+  background: var(--grad);
+}
+
+/* ============ LEARN CARDS ============ */
+.learn-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+.learn-card {
+  background: var(--bg-card);
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  padding: 28px 26px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s, border-color 0.3s;
+}
+.learn-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--rule-strong);
+}
+.learn-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--grad);
+}
+.learn-card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: rgba(0, 245, 212, 0.1);
+  border: 1px solid rgba(0, 245, 212, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cyan);
+  font-size: 20px;
+  margin-bottom: 18px;
+}
+.learn-card p {
+  font-size: 15.5px;
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+.learn-card p b { color: var(--ink); font-weight: 700; }
+@media (max-width: 720px) {
+  .learn-grid { grid-template-columns: 1fr; }
+}
+
+/* ============ TOOLS CARDS ============ */
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+.tool-card {
+  background: var(--bg-card);
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  padding: 20px 22px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s;
+  position: relative;
+}
+.tool-card:hover {
+  border-color: var(--cyan);
+  transform: translateY(-2px);
+  background: rgba(0, 245, 212, 0.03);
+}
+.tool-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 9px;
+  background: var(--bg);
+  border: 1px solid var(--rule-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.tool-info { flex: 1; min-width: 0; }
+.tool-name {
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+.tool-meta {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-faint);
+  letter-spacing: 0.04em;
+}
+.tool-badge {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  padding: 4px 10px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+.tool-badge-free {
+  background: rgba(74, 222, 128, 0.12);
+  color: var(--green);
+  border: 1px solid rgba(74, 222, 128, 0.3);
+}
+.tool-badge-paid {
+  background: rgba(255, 122, 61, 0.1);
+  color: var(--orange);
+  border: 1px solid rgba(255, 122, 61, 0.3);
+}
+@media (max-width: 720px) {
+  .tools-grid { grid-template-columns: 1fr; }
+}
+
+/* ============ WARNINGS ============ */
+.warnings {
+  margin: 40px 0;
+}
+.warning-card {
+  background: rgba(255, 122, 61, 0.05);
+  border: 1px solid rgba(255, 122, 61, 0.3);
+  border-radius: 12px;
+  padding: 24px 28px;
+  position: relative;
+  margin-bottom: 14px;
+}
+.warning-card::before {
+  content: '⚠';
+  position: absolute;
+  top: 22px;
+  left: -1px;
+  width: 32px;
+  height: 32px;
+  background: var(--orange);
+  color: #000;
+  border-radius: 0 8px 8px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 900;
+}
+.warning-card-content { padding-left: 36px; }
+.warning-card h4 {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 18px;
+  letter-spacing: -0.005em;
+  color: var(--orange);
+  margin-bottom: 8px;
+}
+.warning-card p {
+  font-size: 14.5px;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+.warning-card p code {
+  font-family: var(--mono);
+  background: var(--bg);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: var(--cyan);
+}
+
+/* ============ STEPS ============ */
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  margin-top: 16px;
+}
+.step-card {
+  background: var(--bg-card);
+  border: 1px solid var(--rule);
+  border-radius: 18px;
+  padding: 36px 36px 32px;
+  position: relative;
+  overflow: hidden;
+}
+.step-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--grad);
+}
+.step-card::after {
+  content: '';
+  position: absolute;
+  top: -100px;
+  right: -100px;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(0, 245, 212, 0.06), transparent 70%);
+  pointer-events: none;
+}
+.step-num {
+  font-family: var(--display);
+  font-size: clamp(54px, 8vw, 88px);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 12px;
+  display: inline-block;
+}
+.step-num small {
+  font-size: 0.4em;
+  color: var(--ink-faint);
+  -webkit-text-fill-color: var(--ink-faint);
+  margin-left: 4px;
+}
+.step-title {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(22px, 2.6vw, 30px);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin-bottom: 12px;
+  color: var(--ink);
+}
+.step-lead {
+  font-size: 15.5px;
+  color: var(--ink-soft);
+  line-height: 1.55;
+  margin-bottom: 24px;
+}
+.step-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+.step-action {
+  font-size: 15px;
+  color: var(--ink);
+  padding-left: 28px;
+  position: relative;
+  line-height: 1.55;
+}
+.step-action::before {
+  content: '▸';
+  position: absolute;
+  left: 8px;
+  color: var(--cyan);
+  font-weight: 700;
+}
+.step-tip {
+  background: rgba(200, 255, 0, 0.04);
+  border: 1px solid rgba(200, 255, 0, 0.2);
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin-top: 16px;
+  font-size: 14px;
+  color: var(--ink-soft);
+  line-height: 1.55;
+  display: flex;
+  gap: 12px;
+}
+.step-tip::before {
+  content: '💡';
+  flex-shrink: 0;
+  font-size: 16px;
+}
+.step-tip a { color: var(--lime); text-decoration: none; border-bottom: 1px dashed var(--lime); }
+.step-tip a:hover { border-bottom-style: solid; }
+.step-warn {
+  background: rgba(255, 122, 61, 0.05);
+  border: 1px solid rgba(255, 122, 61, 0.25);
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin-top: 16px;
+  font-size: 14px;
+  color: var(--ink-soft);
+  line-height: 1.55;
+  display: flex;
+  gap: 12px;
+}
+.step-warn::before {
+  content: '⚠️';
+  flex-shrink: 0;
+  font-size: 16px;
+}
+.step-settings {
+  background: rgba(0, 245, 212, 0.04);
+  border: 1px solid rgba(0, 245, 212, 0.2);
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin-top: 16px;
+  font-size: 14px;
+  color: var(--ink-soft);
+  line-height: 1.55;
+  display: flex;
+  gap: 12px;
+}
+.step-settings::before {
+  content: '⚙️';
+  flex-shrink: 0;
+  font-size: 16px;
+}
+.step-settings code {
+  font-family: var(--mono);
+  background: var(--bg);
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: var(--cyan);
+}
+@media (max-width: 720px) {
+  .step-card { padding: 28px 22px 24px; }
+}
+
+/* ============ PROMPT BLOCK ============ */
+.prompt-block {
+  background: var(--bg);
+  border: 1px solid var(--rule-strong);
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+  margin-top: 8px;
+  box-shadow: 0 0 30px rgba(0, 245, 212, 0.04);
+}
+.prompt-block::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--grad);
+}
+.prompt-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 22px 12px 26px;
+  border-bottom: 1px solid var(--rule);
+}
+.prompt-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--cyan);
+  text-transform: uppercase;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.prompt-label::before { content: '💬'; }
+.prompt-copy {
+  background: transparent;
+  color: var(--ink-muted);
+  border: 1px solid var(--rule-strong);
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.prompt-copy::before { content: '◻'; font-size: 13px; }
+.prompt-copy:hover {
+  color: var(--cyan);
+  border-color: var(--cyan);
+  background: rgba(0, 245, 212, 0.06);
+}
+.prompt-copy.copied {
+  color: var(--green);
+  border-color: var(--green);
+  background: rgba(74, 222, 128, 0.08);
+}
+.prompt-copy.copied::before { content: '✓'; }
+.prompt-text {
+  padding: 22px 26px 26px;
+  font-family: var(--mono);
+  font-size: 13.5px;
+  color: var(--ink);
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+.prompt-text .placeholder {
+  background: rgba(255, 122, 61, 0.15);
+  color: var(--orange);
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-weight: 700;
+}
+
+/* ============ ALL LINKS ============ */
+.links-section { margin-top: 24px; }
+.links-group {
+  margin-bottom: 32px;
+}
+.links-group-title {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--rule);
+}
+.links-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+.link-card {
+  background: var(--bg-card);
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  padding: 18px 22px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s;
+  position: relative;
+}
+.link-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--lime);
+  background: rgba(200, 255, 0, 0.03);
+}
+.link-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  background: var(--bg);
+  border: 1px solid var(--rule-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.link-info { flex: 1; min-width: 0; }
+.link-name {
+  font-family: var(--mono);
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+.link-desc {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--ink-faint);
+  letter-spacing: 0.04em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+@media (max-width: 720px) {
+  .links-grid { grid-template-columns: 1fr; }
+}
+
+/* ============ CTA INTENSIVE ============ */
+.cta-intensive {
+  margin: 80px 0 60px;
+  background: var(--bg-card);
+  border: 1px solid var(--rule-strong);
+  border-radius: 24px;
+  padding: 56px 48px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 80px rgba(0, 245, 212, 0.05);
+  animation: cta-glow 3s ease-in-out infinite;
+}
+@keyframes cta-glow {
+  0%, 100% { box-shadow: 0 0 80px rgba(0, 245, 212, 0.05), 0 0 0 rgba(255, 122, 61, 0); }
+  50% { box-shadow: 0 0 120px rgba(0, 245, 212, 0.12), 0 0 60px rgba(255, 122, 61, 0.06); }
+}
+.cta-intensive::before {
+  content: '';
+  position: absolute;
+  top: -50px;
+  left: -50px;
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, rgba(0, 245, 212, 0.15), transparent 70%);
+  pointer-events: none;
+}
+.cta-intensive::after {
+  content: '';
+  position: absolute;
+  bottom: -50px;
+  right: -50px;
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, rgba(255, 122, 61, 0.15), transparent 70%);
+  pointer-events: none;
+}
+.cta-title {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(28px, 4vw, 44px);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  margin-bottom: 36px;
+  position: relative;
+}
+.cta-title .grad {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.cta-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 36px;
+  margin-bottom: 36px;
+  position: relative;
+}
+.cta-col h5 {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: var(--cyan);
+  text-transform: uppercase;
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--rule);
+}
+.cta-col-right h5 { color: var(--orange); }
+.cta-col ul { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+.cta-col li {
+  font-size: 15px;
+  color: var(--ink);
+  display: flex;
+  gap: 12px;
+  line-height: 1.5;
+}
+.cta-col li::before {
+  flex-shrink: 0;
+  font-size: 17px;
+}
+.cta-col-left li::before { content: '✅'; }
+.cta-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  padding-top: 28px;
+  border-top: 1px solid var(--rule);
+  position: relative;
+  flex-wrap: wrap;
+}
+.cta-free {
+  font-family: var(--display);
+  font-size: 18px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.cta-free .accent {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.cta-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 28px;
+  background: var(--grad);
+  color: #000;
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 10px;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.cta-button::after {
+  content: '→';
+  font-size: 18px;
+  transition: transform 0.3s;
+}
+.cta-button:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(0, 245, 212, 0.25); }
+.cta-button:hover::after { transform: translateX(4px); }
+@media (max-width: 720px) {
+  .cta-intensive { padding: 40px 28px; }
+  .cta-cols { grid-template-columns: 1fr; gap: 24px; }
+  .cta-bottom { flex-direction: column; align-items: flex-start; }
+  .cta-button { width: 100%; justify-content: center; }
+}
+
+/* ============ FOOTER ============ */
+.footer {
+  border-top: 1px solid var(--rule);
+  padding: 48px 32px;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+.footer-brand {
+  font-family: var(--display);
+  font-size: 24px;
+  letter-spacing: 0.04em;
+  margin-bottom: 8px;
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.footer-tagline {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--ink-muted);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+.footer-yt {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ink-soft);
+  text-decoration: none;
+  padding: 10px 20px;
+  border: 1px solid var(--rule-strong);
+  border-radius: 100px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  transition: all 0.3s;
+}
+.footer-yt:hover {
+  border-color: var(--orange);
+  color: var(--orange);
+}
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-brand">МАСТОДОНТ</a>
+    <div class="nav-links">
+      <a href="#learn">Что узнаешь</a>
+      <a href="#tools">Инструменты</a>
+      <a href="#warnings">Внимание</a>
+      <a href="#steps">Шаги</a>
+      <a href="#links">Все ссылки</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-badge">Материалы к уроку</div>
+  <h1 class="hero-title">
+    <span class="grad">DeepSeek V4</span><br>
+    + <span class="grad-warm">Claude Code</span> =<br>
+    100X ДЕШЕВЛЕ
+  </h1>
+  <p class="hero-sub">
+    Подключаешь <b>DeepSeek V4 Pro</b> к Claude Code через прокси за 5 минут.
+    Работаешь в трёх терминалах параллельно: Claude дизайнит, DeepSeek кодит,
+    Claude-аудитор проверяет. Тот же воркфлоу что у Anthropic — но в 30 раз дешевле.
+  </p>
+  <a class="hero-video" href="https://www.youtube.com/watch?v=N2oyRDf3kSU" target="_blank" rel="noopener">
+    <span class="hero-video-play"></span>
+    <span class="hero-video-text">
+      <small>Смотреть видео</small>
+      <span>YouTube · ИИ Мастодонт</span>
+    </span>
+  </a>
+</section>
+
+<!-- ============ WHAT YOU LEARN ============ -->
+<section id="learn" class="container">
+  <div class="section-tag">Что научишься делать</div>
+  <h2 class="section-title">Четыре практических <span class="grad">навыка</span></h2>
+  <div class="learn-grid">
+    <div class="learn-card">
+      <div class="learn-card-icon">⚡</div>
+      <p>Запускать Claude Code на <b>DeepSeek V4</b> — кодинг <b>в 30 раз дешевле</b> обычного</p>
+    </div>
+    <div class="learn-card">
+      <div class="learn-card-icon">🔀</div>
+      <p>Работать параллельно в <b>трёх терминалах</b>: Claude дизайнит / DeepSeek кодит / Claude-аудитор проверяет</p>
+    </div>
+    <div class="learn-card">
+      <div class="learn-card-icon">🎨</div>
+      <p>Собирать сайт в стиле любого бренда (<b>SpaceX, Apple, Tesla</b>) за пять минут</p>
+    </div>
+    <div class="learn-card">
+      <div class="learn-card-icon">🆓</div>
+      <p>Использовать <b>бесплатные модели</b> (Qwen, Llama) через OpenRouter — ноль рублей в день</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TOOLS ============ -->
+<section id="tools" class="container">
+  <div class="section-tag">Что понадобится</div>
+  <h2 class="section-title">Семь <span class="grad-warm">инструментов</span></h2>
+  <div class="tools-grid">
+    <a class="tool-card" href="https://claude.com/code" target="_blank" rel="noopener">
+      <div class="tool-icon">✻</div>
+      <div class="tool-info"><div class="tool-name">Claude Code</div><div class="tool-meta">claude.com/code</div></div>
+      <div class="tool-badge tool-badge-free">базовая платная</div>
+    </a>
+    <a class="tool-card" href="https://antigravity.google.com" target="_blank" rel="noopener">
+      <div class="tool-icon">🌐</div>
+      <div class="tool-info"><div class="tool-name">Antigravity</div><div class="tool-meta">AI IDE от Google</div></div>
+      <div class="tool-badge tool-badge-free">бесплатно</div>
+    </a>
+    <a class="tool-card" href="https://platform.deepseek.com" target="_blank" rel="noopener">
+      <div class="tool-icon">🐳</div>
+      <div class="tool-info"><div class="tool-name">DeepSeek API</div><div class="tool-meta">$5 хватит надолго</div></div>
+      <div class="tool-badge tool-badge-paid">$5</div>
+    </a>
+    <a class="tool-card" href="https://github.com/Alishahryar1/free-claude-code" target="_blank" rel="noopener">
+      <div class="tool-icon">⌘</div>
+      <div class="tool-info"><div class="tool-name">free-claude-code</div><div class="tool-meta">прокси-роутер · 16.5k★</div></div>
+      <div class="tool-badge tool-badge-free">бесплатно</div>
+    </a>
+    <a class="tool-card" href="https://github.com/VoltAgent/awesome-design-md" target="_blank" rel="noopener">
+      <div class="tool-icon">📐</div>
+      <div class="tool-info"><div class="tool-name">awesome-design-md</div><div class="tool-meta">Apple, SpaceX, Tesla</div></div>
+      <div class="tool-badge tool-badge-free">бесплатно</div>
+    </a>
+    <a class="tool-card" href="https://github.com/shadcn-ui/ui" target="_blank" rel="noopener">
+      <div class="tool-icon">▦</div>
+      <div class="tool-info"><div class="tool-name">shadcn-ui</div><div class="tool-meta">UI-компоненты · 75k★</div></div>
+      <div class="tool-badge tool-badge-free">бесплатно</div>
+    </a>
+    <a class="tool-card" href="https://openrouter.ai" target="_blank" rel="noopener">
+      <div class="tool-icon">⟩</div>
+      <div class="tool-info"><div class="tool-name">OpenRouter</div><div class="tool-meta">Qwen, Llama бесплатно</div></div>
+      <div class="tool-badge tool-badge-free">опционально</div>
+    </a>
+  </div>
+</section>
+
+<!-- ============ WARNINGS ============ -->
+<section id="warnings" class="container container-narrow">
+  <div class="section-tag" style="color: var(--orange);">Прочитай перед стартом</div>
+  <h2 class="section-title">Два критичных <span class="grad-warm">нюанса</span></h2>
+  <div class="warnings">
+    <div class="warning-card">
+      <div class="warning-card-content">
+        <h4>В .env стоит устаревшее имя модели</h4>
+        <p>Репо free-claude-code в .env.example указывает <code>deepseek-chat</code> — DeepSeek её переименовал. Если не поменять — будет <code>ConnectionRefused</code> при запуске. В нашем промпте установки эта инструкция уже зашита, Claude сам пропишет актуальное имя (<code>deepseek-v4-pro</code>).</p>
+      </div>
+    </div>
+    <div class="warning-card">
+      <div class="warning-card-content">
+        <h4>Промо со скидкой ×100 закончилось 5 мая 2026</h4>
+        <p>До 5 мая разница доходила до <code>×3000</code> в пике (с кэшем + Flash). Сейчас стабильно <code>×30 раз</code> дешевле Claude Opus. Всё равно копейки — но не магия трёх тысяч.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STEPS ============ -->
+<section id="steps" class="container">
+  <div class="section-tag">Пошаговая инструкция</div>
+  <h2 class="section-title">Десять <span class="grad">шагов</span></h2>
+
+  <div class="steps">
+
+    <!-- STEP 1 -->
+    <div class="step-card">
+      <div class="step-num">01<small>/10</small></div>
+      <h3 class="step-title">Регистрация на DeepSeek и API-ключ</h3>
+      <p class="step-lead">Получаем ключ доступа для подключения к нейросети.</p>
+      <div class="step-actions">
+        <div class="step-action">Заходишь на <b>platform.deepseek.com</b></div>
+        <div class="step-action">Регистрируешься через почту или Google</div>
+        <div class="step-action">Пополняешь баланс на <b>$5</b> (этого хватит надолго)</div>
+        <div class="step-action">В левом меню → раздел <b>API Keys</b></div>
+        <div class="step-action">Жмёшь <b>Create new API key</b>, даёшь любое имя</div>
+        <div class="step-action">Копируешь ключ сразу — он показывается <b>ОДИН РАЗ</b></div>
+      </div>
+      <div class="step-warn">Сохрани ключ в отдельной заметке. Никому не показывай и никогда не вставляй в чат с DeepSeek боевые ключи / пароли.</div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step-card">
+      <div class="step-num">02<small>/10</small></div>
+      <h3 class="step-title">Клонируем прокси и подключаем DeepSeek</h3>
+      <p class="step-lead">Прокси-роутер free-claude-code перехватывает запросы Claude Code и перенаправляет их в DeepSeek.</p>
+      <div class="step-actions">
+        <div class="step-action">Открываешь <b>Antigravity</b></div>
+        <div class="step-action">Создаёшь новую папку под проект (например <b>D:\DEEPSEEK</b>) и открываешь через <b>File → Open Folder</b></div>
+        <div class="step-action">Открываешь терминал: <b>Terminal → New Terminal</b></div>
+        <div class="step-action">Запускаешь Claude Code: <code style="font-family:var(--mono);background:var(--bg);padding:2px 7px;border-radius:4px;color:var(--cyan)">claude</code> и Enter</div>
+        <div class="step-action">Когда Claude Code загрузился — вставляешь промпт ниже (замени <b>[ВСТАВИТЬ КЛЮЧ]</b> на свой)</div>
+      </div>
+      <div class="prompt-block">
+        <div class="prompt-header">
+          <div class="prompt-label">Промпт #1 — Установка прокси</div>
+          <button class="prompt-copy" data-target="p1">Скопировать</button>
+        </div>
+        <div class="prompt-text" id="p1">Клонируй этот GitHub-репозиторий в текущую папку:
+https://github.com/Alishahryar1/free-claude-code
+
+Прочитай README, выполни все шаги установки и настройки прокси.
+Подключи его к DeepSeek API с моим ключом: <span class="placeholder">[ВСТАВИТЬ КЛЮЧ]</span>
+
+ВАЖНО — про модель: репо в .env.example указывает
+"deepseek-chat", но DeepSeek её переименовал. Перед запуском
+прокси сходи в API DeepSeek, узнай актуальное имя
+(скорее всего deepseek-v4-pro), пропиши его в .env.
+
+Создай два шорткат-алиаса в PowerShell-профиле:
+- ds — Claude Code через прокси
+- ds-yolo — то же + --dangerously-skip-permissions
+
+Запусти ds, проверь что работает без ConnectionRefused.</div>
+      </div>
+      <div class="step-tip">Если Antigravity для тебя новое — глянь отдельный <a href="https://www.youtube.com/watch?v=4gxd9A4L0PU" target="_blank" rel="noopener">гайд по нему</a>. С нуля до уверенной работы.</div>
+      <div class="step-settings">Claude всё сделает сам: клонирует репо, поставит зависимости, запишет ключ в <code>.env</code>, создаст алиасы <code>ds</code> и <code>ds-yolo</code>. Занимает 2-3 минуты.</div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step-card">
+      <div class="step-num">03<small>/10</small></div>
+      <h3 class="step-title">Запускаем DeepSeek в новом терминале</h3>
+      <p class="step-lead">Проверяем что прокси работает и под капотом реально DeepSeek.</p>
+      <div class="step-actions">
+        <div class="step-action">Открываешь <b>НОВЫЙ терминал</b> (не закрывая старый)</div>
+        <div class="step-action">Набираешь команду <code style="font-family:var(--mono);background:var(--bg);padding:2px 7px;border-radius:4px;color:var(--cyan)">ds</code> и Enter</div>
+        <div class="step-action">Стартует интерфейс Claude Code — но под капотом DeepSeek V4 Pro</div>
+        <div class="step-action">Задаёшь любой тестовый вопрос (например «напиши hello.py»)</div>
+        <div class="step-action">Спрашиваешь напрямую — убедиться что движок правильный</div>
+      </div>
+      <div class="prompt-block">
+        <div class="prompt-header">
+          <div class="prompt-label">Промпт #2 — Подтверждение модели</div>
+          <button class="prompt-copy" data-target="p2">Скопировать</button>
+        </div>
+        <div class="prompt-text" id="p2">Подтверди что мы работаем через DeepSeek V4 Pro.</div>
+      </div>
+      <div class="step-settings">Если спросить «кто ты» — ответит «<b>Claude Sonnet 4.6</b>». Это нормально, system prompt подменяется. Но под капотом реально DeepSeek.</div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step-card">
+      <div class="step-num">04<small>/10</small></div>
+      <h3 class="step-title">Открываем третий терминал — обычный Claude</h3>
+      <p class="step-lead">Теперь у нас параллельно работают два разных движка.</p>
+      <div class="step-actions">
+        <div class="step-action">Открываешь <b>третий терминал</b> в Antigravity</div>
+        <div class="step-action">Запускаешь обычный Claude Code: <code style="font-family:var(--mono);background:var(--bg);padding:2px 7px;border-radius:4px;color:var(--cyan)">claude</code> и Enter</div>
+        <div class="step-action">Слева DeepSeek, справа реальный Claude — переключайся мышкой</div>
+      </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step-card">
+      <div class="step-num">05<small>/10</small></div>
+      <h3 class="step-title">Тестируем Tool Use на кастомном скилле</h3>
+      <p class="step-lead">Главная фишка прокси — DeepSeek умеет дёргать кастомные скиллы Claude Code как родной. Раньше сторонние модели на этом сыпались.</p>
+      <div class="step-actions">
+        <div class="step-action">Идёшь в <b>DS-терминал</b></div>
+        <div class="step-action">Вызываешь любой свой кастомный скилл</div>
+      </div>
+      <div class="prompt-block">
+        <div class="prompt-header">
+          <div class="prompt-label">Промпт #3 — Тест скилла</div>
+          <button class="prompt-copy" data-target="p3">Скопировать</button>
+        </div>
+        <div class="prompt-text" id="p3">/content</div>
+      </div>
+      <div class="step-settings">Если у тебя нет своего скилла — попроси DS создать файл, выполнить bash-команду, или дёрнуть WebFetch. Главное — проверить что инструменты дёргаются корректно.</div>
+    </div>
+
+    <!-- STEP 6 -->
+    <div class="step-card">
+      <div class="step-num">06<small>/10</small></div>
+      <h3 class="step-title">Клонируем дизайн-системы мировых брендов</h3>
+      <p class="step-lead">awesome-design-md — пакет с дизайн-системами Apple, SpaceX, Tesla, Linear, Vercel и других.</p>
+      <div class="step-actions">
+        <div class="step-action">В DS-терминале даёшь промпт ниже</div>
+      </div>
+      <div class="prompt-block">
+        <div class="prompt-header">
+          <div class="prompt-label">Промпт #4 — Клон дизайн-репо</div>
+          <button class="prompt-copy" data-target="p4">Скопировать</button>
+        </div>
+        <div class="prompt-text" id="p4">Клонируй этот репозиторий в текущую папку:
+https://github.com/VoltAgent/awesome-design-md</div>
+      </div>
+      <div class="step-warn">Никогда не пиши в DeepSeek боевые API-ключи, пароли, доступы к продакшну. Запросы идут на серверы в Китай, политика DS разрешает обучение на твоих сообщениях.</div>
+    </div>
+
+    <!-- STEP 7 -->
+    <div class="step-card">
+      <div class="step-num">07<small>/10</small></div>
+      <h3 class="step-title">Собираем сайт через Claude</h3>
+      <p class="step-lead">Дизайн — это вкус. Отдаём Claude. Он король UI/UX.</p>
+      <div class="step-actions">
+        <div class="step-action">Идёшь в обычный <b>Claude-терминал</b> (третий)</div>
+        <div class="step-action">Даёшь промпт ниже (можешь поменять SpaceX на любой бренд из репо)</div>
+      </div>
+      <div class="prompt-block">
+        <div class="prompt-header">
+          <div class="prompt-label">Промпт #5 — Сайт в стиле SpaceX</div>
+          <button class="prompt-copy" data-target="p5">Скопировать</button>
+        </div>
+        <div class="prompt-text" id="p5">Используя дизайн-репо awesome-design-md в этой папке, возьми
+дизайн-систему SpaceX и собери красивый одностраничный лендинг
+для рок-группы МАСТОДОНТ.
+
+Также используй компоненты из этого репо:
+https://github.com/shadcn-ui/ui
+
+И добавь вторым блоком на сайте калькулятор «Сколько энергии
+у тебя на сцене» — пусть будет интерактивно и круто.</div>
+      </div>
+      <div class="step-settings">Claude поставит shadcn-ui через CLI, прочитает дизайн-систему SpaceX, сверстает лендинг с тёмной эстетикой и интерактивным калькулятором. <b>3-5 минут.</b></div>
+      <div class="step-tip">Лайфхак: если видишь сайт с дизайном который нравится — копируешь URL, гуглишь <b>«html website extractor»</b>, получаешь исходник. Скармливаешь его Claude как образец — он подхватит стиль.</div>
+    </div>
+
+    <!-- STEP 8 -->
+    <div class="step-card">
+      <div class="step-num">08<small>/10</small></div>
+      <h3 class="step-title">DeepSeek дописывает сложный калькулятор</h3>
+      <p class="step-lead">Сложная математика и логика — не дизайн. Отдаём DeepSeek (в 30 раз дешевле, идеально для алгоритмов).</p>
+      <div class="step-actions">
+        <div class="step-action">Идёшь в <b>DS-терминал</b></div>
+        <div class="step-action">Чистишь контекст командой <code style="font-family:var(--mono);background:var(--bg);padding:2px 7px;border-radius:4px;color:var(--cyan)">/clear</code></div>
+        <div class="step-action">Запускаешь сайт локально: <code style="font-family:var(--mono);background:var(--bg);padding:2px 7px;border-radius:4px;color:var(--cyan)">npm run dev</code> (откроется localhost:3000)</div>
+        <div class="step-action">Даёшь промпт ниже, скармливая URL текущего сайта — DS подхватит стиль</div>
+      </div>
+      <div class="prompt-block">
+        <div class="prompt-header">
+          <div class="prompt-label">Промпт #6 — Сложный калькулятор</div>
+          <button class="prompt-copy" data-target="p6">Скопировать</button>
+        </div>
+        <div class="prompt-text" id="p6">Я хочу добавить на сайт второй калькулятор — «Доход с тура»
+(ROI рок-карьеры). Сложный, с переменными:
+— количество концертов в туре
+— средняя вместимость зала
+— цена билета
+— процент заполняемости
+— расходы на тур (логистика, отель, еда)
+
+Сделай его настолько сложным и умным, насколько возможно.
+Поставь третьим блоком, ПОД калькулятором энергии.
+
+Вот ссылка на текущий HTML, чтобы ты вписался в стиль 1в1:
+http://localhost:3000</div>
+      </div>
+      <div class="step-settings">DeepSeek сам подхватит эстетику сайта (шрифты, цвета, glow), и допишет калькулятор будто это делал тот же дизайнер. <b>Сессия стоит меньше доллара.</b></div>
+    </div>
+
+    <!-- STEP 9 -->
+    <div class="step-card">
+      <div class="step-num">09<small>/10</small></div>
+      <h3 class="step-title">Бесплатные модели через OpenRouter <small style="font-size: 0.5em; color: var(--ink-faint); -webkit-text-fill-color: var(--ink-faint);">(опционально)</small></h3>
+      <p class="step-lead">Если вообще не хочешь платить — переключайся на бесплатные открытые модели (Qwen, Llama, Nemotron).</p>
+      <div class="step-actions">
+        <div class="step-action">Идёшь на <b>openrouter.ai</b></div>
+        <div class="step-action">Регистрируешься, в разделе <b>API Keys</b> создаёшь новый ключ</div>
+        <div class="step-action">Возвращаешься в Antigravity и даёшь промпт прокси-агенту</div>
+      </div>
+      <div class="prompt-block">
+        <div class="prompt-header">
+          <div class="prompt-label">Промпт #7 — Переключение на OpenRouter</div>
+          <button class="prompt-copy" data-target="p7">Скопировать</button>
+        </div>
+        <div class="prompt-text" id="p7">Вместо DeepSeek V4 я хочу использовать бесплатные модели
+из OpenRouter. Настрой роутинг так, чтобы переключался между
+бесплатными моделями без рейт-лимитов.
+Вот мой ключ: <span class="placeholder">[КЛЮЧ]</span></div>
+      </div>
+      <div class="step-settings">После рестарта — доступ к <b>Qwen 2.5 Coder, Llama 3, Nemotron</b> абсолютно бесплатно. Тот же воркфлоу, ноль рублей.</div>
+    </div>
+
+    <!-- STEP 10 -->
+    <div class="step-card">
+      <div class="step-num">10<small>/10</small></div>
+      <h3 class="step-title">Claude-аудитор как senior-ревьюер</h3>
+      <p class="step-lead">Финальный штрих — добавляем третий слой: второй Claude аудитит код, который написал DeepSeek.</p>
+      <div class="step-actions">
+        <div class="step-action">Открываешь <b>ЧЕТВЁРТЫЙ терминал</b></div>
+        <div class="step-action">Запускаешь обычный Claude: <code style="font-family:var(--mono);background:var(--bg);padding:2px 7px;border-radius:4px;color:var(--cyan)">claude</code> и Enter</div>
+        <div class="step-action">Даёшь промпт ниже</div>
+      </div>
+      <div class="prompt-block">
+        <div class="prompt-header">
+          <div class="prompt-label">Промпт #8 — Code Review</div>
+          <button class="prompt-copy" data-target="p8">Скопировать</button>
+        </div>
+        <div class="prompt-text" id="p8">Я работаю над сайтом рок-группы МАСТОДОНТ. Код калькулятора
+«Доход с тура» писал DeepSeek в соседнем терминале. Выступи
+как Senior фронтенд-разработчик и проведи code review:
+
+— Найди баги
+— Проверь математику и логику
+— UX-проблемы (валидация, edge-кейсы)
+— Безопасность (XSS, eval, неэкранированный ввод)
+— Конкретные улучшения
+
+Только по делу. В конце — короткий вердикт.</div>
+      </div>
+      <div class="step-settings">Итог: замкнутый цикл уровня IT-команды — <b>Claude дизайнит → DeepSeek кодит → второй Claude аудитит</b>. Параллельно, в 4 терминалах. Дешевле кружки кофе в день.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ ALL LINKS ============ -->
+<section id="links" class="container">
+  <div class="section-tag">Все ссылки</div>
+  <h2 class="section-title">Инструменты и <span class="grad">видео</span></h2>
+
+  <div class="links-section">
+    <div class="links-group">
+      <div class="links-group-title">🔧 Инструменты из видео</div>
+      <div class="links-grid">
+        <a class="link-card" href="https://platform.deepseek.com" target="_blank" rel="noopener">
+          <div class="link-icon">🐳</div>
+          <div class="link-info"><div class="link-name">DeepSeek API</div><div class="link-desc">platform.deepseek.com</div></div>
+        </a>
+        <a class="link-card" href="https://github.com/Alishahryar1/free-claude-code" target="_blank" rel="noopener">
+          <div class="link-icon">⌘</div>
+          <div class="link-info"><div class="link-name">free-claude-code</div><div class="link-desc">прокси-роутер · 16.5k★</div></div>
+        </a>
+        <a class="link-card" href="https://github.com/VoltAgent/awesome-design-md" target="_blank" rel="noopener">
+          <div class="link-icon">📐</div>
+          <div class="link-info"><div class="link-name">awesome-design-md</div><div class="link-desc">дизайн-системы брендов</div></div>
+        </a>
+        <a class="link-card" href="https://github.com/shadcn-ui/ui" target="_blank" rel="noopener">
+          <div class="link-icon">▦</div>
+          <div class="link-info"><div class="link-name">shadcn-ui</div><div class="link-desc">UI-компоненты · 75k★</div></div>
+        </a>
+        <a class="link-card" href="https://openrouter.ai" target="_blank" rel="noopener">
+          <div class="link-icon">⟩</div>
+          <div class="link-info"><div class="link-name">OpenRouter</div><div class="link-desc">бесплатные модели</div></div>
+        </a>
+        <a class="link-card" href="https://antigravity.google.com" target="_blank" rel="noopener">
+          <div class="link-icon">🌐</div>
+          <div class="link-info"><div class="link-name">Antigravity</div><div class="link-desc">AI IDE от Google</div></div>
+        </a>
+        <a class="link-card" href="https://claude.com/code" target="_blank" rel="noopener">
+          <div class="link-icon">✻</div>
+          <div class="link-info"><div class="link-name">Claude Code</div><div class="link-desc">claude.com/code</div></div>
+        </a>
+      </div>
+    </div>
+
+    <div class="links-group">
+      <div class="links-group-title">🎬 Связанные видео</div>
+      <div class="links-grid">
+        <a class="link-card" href="https://www.youtube.com/watch?v=4gxd9A4L0PU" target="_blank" rel="noopener">
+          <div class="link-icon">▶</div>
+          <div class="link-info"><div class="link-name">Полный гайд по Antigravity</div><div class="link-desc">с нуля до уверенной работы</div></div>
+        </a>
+        <a class="link-card" href="https://www.youtube.com/watch?v=Pcw3e4lrBvw" target="_blank" rel="noopener">
+          <div class="link-icon">▶</div>
+          <div class="link-info"><div class="link-name">Как заработать на Claude с нуля</div><div class="link-desc">$1000 за 14 дней — пошагово</div></div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA INTENSIVE ============ -->
+<section class="container">
+  <div class="cta-intensive">
+    <h3 class="cta-title">Первые $1000 на ИИ — <span class="grad">бесплатный интенсив</span></h3>
+    <div class="cta-cols">
+      <div class="cta-col cta-col-left">
+        <h5>Внутри</h5>
+        <ul>
+          <li>Реальный демо AntiGravity вживую</li>
+          <li>Софт, который за 5 минут находит компании без сайтов с готовыми контактами</li>
+          <li>Кейсы учеников: $5000 за 3 проекта без команды</li>
+        </ul>
+      </div>
+      <div class="cta-col cta-col-right">
+        <h5>Два бонуса в конце</h5>
+        <ul>
+          <li>💰 50 скучных и самых прибыльных ниш без конкуренции</li>
+          <li>🚀 Чек-лист: первые $1000 за 7 дней</li>
+        </ul>
+      </div>
+    </div>
+    <div class="cta-bottom">
+      <div class="cta-free"><span class="accent">Бесплатно.</span> Навсегда.</div>
+      <a class="cta-button" href="https://t.me/IntensivMastaBot" target="_blank" rel="noopener">Забрать интенсив</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="footer-brand">МАСТОДОНТ</div>
+  <div class="footer-tagline">AI и нейросети — просто, по делу</div>
+  <a class="footer-yt" href="https://www.youtube.com/watch?v=N2oyRDf3kSU" target="_blank" rel="noopener">
+    ▶ YouTube · смотреть видео
+  </a>
+</footer>
+
+<script>
+// Copy buttons
+document.querySelectorAll('.prompt-copy').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const targetId = btn.dataset.target;
+    const el = document.getElementById(targetId);
+    if (!el) return;
+    const text = el.innerText.replace('[ВСТАВИТЬ КЛЮЧ]', '[ВСТАВИТЬ КЛЮЧ]').replace('[КЛЮЧ]', '[КЛЮЧ]');
+    try {
+      await navigator.clipboard.writeText(text);
+      btn.textContent = 'Скопировано!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'Скопировать';
+        btn.classList.remove('copied');
+      }, 2000);
+    } catch (e) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      ta.remove();
+      btn.textContent = 'Скопировано!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'Скопировать';
+        btn.classList.remove('copied');
+      }, 2000);
+    }
+  });
+});
+</script>
+
+</body>
+</html>
